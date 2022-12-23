@@ -5,7 +5,9 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    re_path('reclamacao/', views.ReclamacaoListView.as_view()),
-    re_path('chat/', views.ChatReclamacaoListView.as_view()),
+    path('reclamacao/', views.ReclamacaoListView.as_view(), name='list-reclamacao'),
+    path('delete_reclamacao/<str:reclamacao_id>', views.ReclamacaoAPIView.delete_chat),
+    path('chat/', views.ChatReclamacaoListView.as_view(), name='list-chat'),
+    path('delete_chat/<str:chat_id>', views.ChatReclamacaoAPIView.delete_chat)
     #url(r'^(P<id>\d+)/edit/$', views.ReclamacaoUpdateView.as_view())
 ]
