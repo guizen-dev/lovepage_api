@@ -1,11 +1,10 @@
-from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path, include
+from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework import routers
 
 from . import views
 
 urlpatterns = [
-    path('all', views.UsuarioView.as_view()),
+    path('', views.usuario_list),
+    path('<str:usuario_id>', views.usuario_detail)
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

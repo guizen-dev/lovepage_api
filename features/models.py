@@ -2,22 +2,15 @@ from django.db import models
 
 # Create your models here.
 
-class Filme(models.Model):
-    photo = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    desc = models.CharField(max_length=255)
+STATE_CHOICES = (
+    ('filme', 'filme'),
+    ('lugar', 'lugar'),
+    ('mural', 'mural'),
+    ('jogo', 'jogo')
+)
 
-class Lugar(models.Model):
-    photo = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    desc = models.CharField(max_length=255)
-
-class Mural(models.Model):
-    photo = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    desc = models.CharField(max_length=255)
-
-class Jogo(models.Model):
-    photo = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    desc = models.CharField(max_length=255)
+class Feature(models.Model):
+    photo = models.CharField(max_length=255, default='filme')
+    name = models.CharField(max_length=255, default='filme')
+    desc = models.CharField(max_length=255, default='filme')
+    type = models.CharField(max_length=13, choices=STATE_CHOICES, default='filme')

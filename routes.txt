@@ -1,0 +1,15 @@
+USUÁRIO:
+localhost:8000/usuarios (GET / POST)
+localhost:8000/usuarios/<id> (GET / DELETE / UPDATE ) 
+
+NOTES:
+localhost:8000/notes (GET / POST) --- todas as notes
+localhost:8000/notes/<id> (GET / DELETE / UPDATE ) --- notes específicas
+localhost:8000/notes/chats (GET / POST) --- todas as mensagens de todas as notes
+localhost:8000/notes/chats/<id> (GET / DELETE / UPDATE ) --- mensagem específica de note específica
+localhost:8000/notes/chat/messages (GET / DELETE) --- todas mensagens de note específica
+
+FEATURES:
+localhost:8000/features (GET / POST) --- todas as features
+localhost:8000/features/detail/<id> (GET / PUT / DELTE) --- feature especifica
+localhost:8000/features/type/<type> (GET) --- features de um tipo especifico

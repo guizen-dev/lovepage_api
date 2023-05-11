@@ -1,22 +1,7 @@
 from rest_framework import serializers
-from .models import Filme, Lugar, Mural, Jogo
+from .models import Feature
 
-class FilmeSerializer(serializers.ModelSerializer):
+class FeatureSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Filme
-        fields = '__all__'
-
-class LugarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lugar
-        fields = '__all__'
-
-class MuralSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Mural
-        fields = '__all__'
-
-class JogoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Jogo
+        model = Feature
         fields = '__all__'

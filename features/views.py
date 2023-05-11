@@ -1,121 +1,57 @@
-from rest_framework.generics import ListAPIView
-from rest_framework.views import APIView
-from django.shortcuts import render
-from .models import Filme, Lugar, Mural, Jogo
-from .serializers import FilmeSerializer, LugarSerializer, MuralSerializer, JogoSerializer
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-from rest_framework.decorators import api_view, renderer_classes
-from rest_framework import permissions, status
-from rest_framework.response import Response
-import json_parser
-import io
+from .models import Feature
+from .serializers import FeatureSerializer
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser 
+from django.http.response import JsonResponse
 
 # Create your views here.
 
-class FilmeView(ListAPIView):
-    queryset = Filme.objects.order_by('id')
-    serializer_class = FilmeSerializer
-    permission_classes = (permissions.AllowAny, )
-    filterset_fields = ['id',]
+# List features
+@api_view(['GET', 'POST'])
+def all_features(request):
+    if request.method == 'GET':
+        feature = Feature.objects.all()
+        feature_serializer = FeatureSerializer(feature, many=True)
+        return JsonResponse(feature_serializer.data, safe=False)
 
-    def request(self, request):
-        if (request.method == "POST"):
-            serializer = Filme(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
+    elif request.method == 'POST':
+        feature_data = JSONParser().parse(request)
+        feature_serializer = FeatureSerializer(data=feature_data)
+        if feature_serializer.is_valid():
+            feature_serializer.save()
+            return JsonResponse(feature_serializer.data, status=status.HTTP_201_CREATED) 
+        return JsonResponse(feature_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class FilmeAPIView(APIView):
-    permission_classes = (permissions.AllowAny, )
-
-    @api_view(('GET',))
-    @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-    def delete_filme(request, filme_id):
-        filme = Filme.objects.get(pk=filme_id)
-        try:
-            filme.delete()
-            return render(request, 'delete_sucessfully.html')
-        except:
-            return render(request, 'unsucessfully_delete.html')
-
-
-
-class LugarView(ListAPIView):
-    queryset = Lugar.objects.order_by('id')
-    serializer_class = LugarSerializer
-    permission_classes = (permissions.AllowAny, )
-    filterset_fields = ['id',]
-
-    def post(self, request):
-        serializer = Lugar(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+# Specif type of features
+@api_view(['GET'])
+def type_features(request, feature_type):
+    feature = Feature.objects.filter(type=feature_type)
     
-class LugarAPIView(APIView):
-    permission_classes = (permissions.AllowAny, )
-
-    @api_view(('GET',))
-    @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-    def delete_lugar(request, lugar_id):
-        lugar = Lugar.objects.get(pk=lugar_id)
-        try:
-            lugar.delete()
-            return render(request, 'delete_sucessfully.html')
-        except:
-            return render(request, 'unsucessfully_delete.html')
-
-
-
-class MuralView(ListAPIView):
-    queryset = Mural.objects.order_by('id')
-    serializer_class = MuralSerializer
-    permission_classes = (permissions.AllowAny, )
-    filterset_fields = ['id',]
-
-    def post(self, request):
-        serializer = Mural(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    if request.method == 'GET': 
+        feature_serializer = FeatureSerializer(feature, many=True)
+        return JsonResponse(feature_serializer.data, safe=False)
     
-class MuralAPIView(APIView):
-    permission_classes = (permissions.AllowAny, )
-
-    @api_view(('GET',))
-    @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-    def delete_mural(request, mural_id):
-        mural = Mural.objects.get(pk=mural_id)
-        try:
-            mural.delete()
-            return render(request, 'delete_sucessfully.html')
-        except:
-            return render(request, 'unsucessfully_delete.html')
-
-
-
-class JogoView(ListAPIView):
-    queryset = Jogo.objects.order_by('id')
-    serializer_class = JogoSerializer
-    permission_classes = (permissions.AllowAny, )
-    filterset_fields = ['id',]
-
-    def post(self, request):
-        serializer = Jogo(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-class JogoAPIView(APIView):
-    permission_classes = (permissions.AllowAny, )
-
-    @api_view(('GET',))
-    @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-    def delete_jogo(request, jogo_id):
-        jogo = Jogo.objects.get(pk=jogo_id)
-        try:
-            jogo.delete()
-            return render(request, 'delete_sucessfully.html')
-        except:
-            return render(request, 'unsucessfully_delete.html')
+# Detail feature
+@api_view(['GET', 'PUT', 'DELETE'])
+def feature_detail(request, feature_id):
+    try:
+        feature = Feature.objects.get(pk=feature_id)
+    except Feature.DoesNotExist:
+        return JsonResponse({'message' : 'A feature nao existe'}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        feature_serializer = FeatureSerializer(feature)
+        return JsonResponse(feature_serializer.data)
+    
+    if request.method == 'PUT':
+        feature_data = JSONParser().parse(request)
+        feature_serializer = FeatureSerializer(feature, data=feature_data)
+        if feature_serializer.is_valid():
+            feature_serializer.save()
+            return JsonResponse(feature_serializer.data)
+        return JsonResponse(feature_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        feature.delete()
+        return JsonResponse({'message' : 'Feature deletada com sucesso!'}, status=status.HTTP_204_NO_CONTENT)

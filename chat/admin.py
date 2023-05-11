@@ -13,7 +13,7 @@ class ReclamacaoAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 class ChatReclamacaoAdmin(admin.ModelAdmin):
-    list_display = ('reclamacao', 'isEnvio', 'user', 'desc')
+    list_display = ('reclamacao', 'user', 'message')
     list_display_links = ('reclamacao',)
     list_per_page = 25
 

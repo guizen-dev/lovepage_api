@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -8,5 +9,9 @@ USER_CHOICES = (
 )
 
 class Usuario(models.Model):
-    password = models.CharField(max_length=255)
     user = models.CharField(max_length=9, choices=USER_CHOICES, default='Luara')
+    password = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=510, unique=True, default='Luara')
+    
+    def __str__(self):
+        return str(self.user)
