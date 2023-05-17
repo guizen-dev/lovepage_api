@@ -1,17 +1,19 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import UserManager
 
 # Create your models here.
 
-USER_CHOICES = (
-    ('Luara','LUARA'),
-    ('Guilherme', 'GUILHERME'),
-)
-
-class Usuario(models.Model):
-    user = models.CharField(max_length=9, choices=USER_CHOICES, default='Luara')
+class Usuario(AbstractBaseUser):
+    user = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=510, unique=True, default='Luara')
+    photo = models.TextField(default='None')
+    
+    USERNAME_FIELD = 'user'
+    REQUIRED_FIELDS = []
+    
+    objects = UserManager()
     
     def __str__(self):
         return str(self.user)

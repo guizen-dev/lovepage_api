@@ -4,7 +4,12 @@ from rest_framework import routers
 
 from . import views
 
+from rest_framework.authtoken.views import obtain_auth_token
+
 urlpatterns = [
-    path('', views.usuario_list),
-    path('<str:usuario_id>', views.usuario_detail)
+    #path('register', views.RegisterView.as_view()),
+    #path('login', views.LoginView.as_view()),
+    path('list', views.all_users),
+    path('delete/<str:usuario_id>', views.DeleteView.as_view()),
+    path('login', obtain_auth_token, name="login")
 ]

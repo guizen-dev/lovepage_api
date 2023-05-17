@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\joels\Desktop\LovePage\lovepageapi\venv"
+VIRTUAL_ENV="C:\Users\joels\Desktop\LovePage\lovepageapi-commit16\lovepage_api\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

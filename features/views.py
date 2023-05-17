@@ -1,7 +1,8 @@
 from .models import Feature
 from .serializers import FeatureSerializer
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.parsers import JSONParser 
 from django.http.response import JsonResponse
 
@@ -9,6 +10,7 @@ from django.http.response import JsonResponse
 
 # List features
 @api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
 def all_features(request):
     if request.method == 'GET':
         feature = Feature.objects.all()
@@ -23,7 +25,7 @@ def all_features(request):
             return JsonResponse(feature_serializer.data, status=status.HTTP_201_CREATED) 
         return JsonResponse(feature_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-# Specif type of features
+# Specific type of features
 @api_view(['GET'])
 def type_features(request, feature_type):
     feature = Feature.objects.filter(type=feature_type)
@@ -34,6 +36,7 @@ def type_features(request, feature_type):
     
 # Detail feature
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
 def feature_detail(request, feature_id):
     try:
         feature = Feature.objects.get(pk=feature_id)
