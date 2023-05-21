@@ -43,6 +43,17 @@ def all_users(request):
         usuario = Usuario.objects.all()
         usuario_serializer = UsuarioSerializer(usuario, many=True)
         return JsonResponse(usuario_serializer.data, safe=False)
+    
+@api_view(['GET'])
+def user_detail(request, usuario_id):
+    try:
+        user = Usuario.objects.get(pk=usuario_id)
+    except Usuario.DoesNotExist:
+        return JsonResponse({'message' : 'Usuario nao existe'}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        usuario_serializer = UsuarioSerializer(user)
+        return JsonResponse(usuario_serializer.data)
 
 class LoginView(APIView):
     def post(self, request):

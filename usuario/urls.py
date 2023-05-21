@@ -10,6 +10,7 @@ urlpatterns = [
     #path('register', views.RegisterView.as_view()),
     #path('login', views.LoginView.as_view()),
     path('list', views.all_users),
-    path('delete/<str:usuario_id>', views.DeleteView.as_view()),
+    path('detail/<str:usuario_id>', views.user_detail),
+    #path('delete/<str:usuario_id>', views.DeleteView.as_view()),
     path('login', obtain_auth_token, name="login")
 ]
