@@ -9,7 +9,7 @@ STATE_CHOICES = (
 )
 
 class Feature(models.Model):
-    photo = models.CharField(max_length=255, default='filme')
+    photo = models.FileField(upload_to='media/')
     name = models.CharField(max_length=255, default='filme')
     desc = models.CharField(max_length=255, default='filme')
     type = models.CharField(max_length=13, choices=STATE_CHOICES, default='filme')
