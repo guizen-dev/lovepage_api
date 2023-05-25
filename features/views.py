@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.parsers import JSONParser 
 from django.http.response import JsonResponse
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # Create your views here.
 
@@ -16,10 +18,10 @@ def all_features(request):
         feature = Feature.objects.all()
         feature_serializer = FeatureSerializer(feature, many=True)
         return JsonResponse(feature_serializer.data, safe=False)
+    
 
     elif request.method == 'POST':
-        feature_data = JSONParser().parse(request)
-        feature_serializer = FeatureSerializer(data=feature_data)
+        feature_serializer = FeatureSerializer(data=request.data)
         if feature_serializer.is_valid():
             feature_serializer.save()
             return JsonResponse(feature_serializer.data, status=status.HTTP_201_CREATED) 
@@ -36,6 +38,7 @@ def type_features(request, feature_type):
     
 # Detail feature
 @api_view(['GET', 'PUT', 'DELETE'])
+@parser_classes([MultiPartParser, FormParser])
 @permission_classes((IsAuthenticatedOrReadOnly,))
 def feature_detail(request, feature_id):
     try:
@@ -48,11 +51,10 @@ def feature_detail(request, feature_id):
         return JsonResponse(feature_serializer.data)
     
     if request.method == 'PUT':
-        feature_data = JSONParser().parse(request)
-        feature_serializer = FeatureSerializer(feature, data=feature_data)
+        feature_serializer = FeatureSerializer(data=request.data)
         if feature_serializer.is_valid():
             feature_serializer.save()
-            return JsonResponse(feature_serializer.data)
+            return JsonResponse(feature_serializer.data, status=status.HTTP_201_CREATED) 
         return JsonResponse(feature_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE':
