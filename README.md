@@ -24,3 +24,7 @@ The API provides the following features:
 
 - User Authentication: Utilizing `authtoken` for secure user authentication.
 - Permissions: Implementing permissions to control access to specific API endpoints.
+
+## Authors
+- [Guilherme](https://github.com/guizen-dev/) 
+- [Luara](https://github.com/luluoliv)
