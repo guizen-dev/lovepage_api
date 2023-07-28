@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'usuario',
     'features',
     'chat',
+    'moviedb',
     'django_filters',
     'corsheaders',
     'rest_framework.authtoken'

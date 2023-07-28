@@ -9,8 +9,9 @@ STATE_CHOICES = (
 )
 
 class Feature(models.Model):
-    photo = models.FileField(upload_to='media/', default='')
-    name = models.CharField(max_length=255, default='filme')
-    desc = models.CharField(max_length=255, default='filme')
-    type = models.CharField(max_length=13, choices=STATE_CHOICES, default='filme')
+    photo_file = models.FileField(upload_to='media/', default='', null=True)
+    photo_url = models.CharField(max_length=255, default='', null=True)
+    name = models.CharField(max_length=255, default='')
+    desc = models.CharField(max_length=255, default='')
+    type = models.CharField(max_length=13, choices=STATE_CHOICES, default='')
     rating = models.CharField(max_length=2, default='0')

@@ -9,4 +9,5 @@ urlpatterns = [
     path('usuarios/', include('usuario.urls')),
     path('features/', include('features.urls')),
     path('notes/', include('chat.urls')),
+    path('moviedb/', include('moviedb.urls'))
 ]
