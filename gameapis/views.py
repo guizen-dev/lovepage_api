@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 
 @api_view(['GET'])
-def game_detail(request, game_id):
+def game_detail(request, game_name):
     
     if request.method == 'GET':
         access_token = os.getenv('IGDB_ACCESS_TOKEN')
@@ -19,27 +19,33 @@ def game_detail(request, game_id):
                 'Authorization': f'Bearer {access_token}',
             }
 
-            requestData = f'fields *; where id = {game_id};'
+            game=game_name
+            requestData = f'fields *; where name = "{game_name.capitalize()}";'
 
             detail_response = requests.post(igdb_url, data=requestData, headers=headers)            
 
             if detail_response.status_code == 200:
                 data = detail_response.json()
                 
-                artworks_value = data[0]['artworks'][0]
-                requestData = f'fields *; where id = {artworks_value};'
-                artwork_response = requests.post(igdb_artwork_url, data=requestData, headers=headers)
+                try:
+                    artworks_value = data[0]['artworks'][0]
+                    requestData = f'fields *; where id = {artworks_value};'
+                    artwork_response = requests.post(igdb_artwork_url, data=requestData, headers=headers)
                 
-                if detail_response.status_code == 200:
-                    artwork_data = artwork_response.json()
-                    combined_data = {
-                        "detail_data": data,
-                        "artwork_data": artwork_data
-                    }
-                    
-                    return JsonResponse(combined_data, safe=False)
-                else:
+                    if detail_response.status_code == 200:
+                        artwork_data = artwork_response.json()
+                        combined_data = {
+                            "detail_data": data,
+                            "artwork_data": artwork_data
+                        }
+                        
+                        return JsonResponse(combined_data, safe=False)
+                    else:
+                        return JsonResponse(data, safe=False)
+                except:
                     return JsonResponse(data, safe=False)
+                
+                return JsonResponse(data, safe=False)
             else:
                 return JsonResponse({'error': 'Failed to fetch data from igdb API'}, status=detail_response.status_code)
         except requests.RequestException as e:
