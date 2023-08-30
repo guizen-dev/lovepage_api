@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 
 @api_view(['GET'])
-def game_detail(request, game_name):
+def game_detail(request, game_id):
     
     if request.method == 'GET':
         access_token = os.getenv('IGDB_ACCESS_TOKEN')
@@ -19,8 +19,7 @@ def game_detail(request, game_name):
                 'Authorization': f'Bearer {access_token}',
             }
 
-            game=game_name
-            requestData = f'fields *; where name = "{game_name.capitalize()}";'
+            requestData = f'fields *; where id = "{game_id}";'
 
             detail_response = requests.post(igdb_url, data=requestData, headers=headers)            
 
