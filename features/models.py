@@ -5,7 +5,8 @@ from django.db import models
 STATE_CHOICES = (
     ('filme', 'filme'),
     ('lugar', 'lugar'),
-    ('mural', 'mural')
+    ('mural', 'mural'),
+    ('jogo', 'jogo')
 )
 
 class Feature(models.Model):
