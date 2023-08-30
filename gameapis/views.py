@@ -19,7 +19,7 @@ def game_detail(request, game_id):
                 'Authorization': f'Bearer {access_token}',
             }
 
-            requestData = f'fields *; where id = "{game_id}";'
+            requestData = f'fields *; where id = {game_id};'
 
             detail_response = requests.post(igdb_url, data=requestData, headers=headers)            
 
@@ -43,8 +43,6 @@ def game_detail(request, game_id):
                         return JsonResponse(data, safe=False)
                 except:
                     return JsonResponse(data, safe=False)
-                
-                return JsonResponse(data, safe=False)
             else:
                 return JsonResponse({'error': 'Failed to fetch data from igdb API'}, status=detail_response.status_code)
         except requests.RequestException as e:
