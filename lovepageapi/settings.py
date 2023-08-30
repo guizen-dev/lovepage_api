@@ -45,9 +45,11 @@ INSTALLED_APPS = [
     'features',
     'chat',
     'moviedb',
+    'gameapis',
+    'googlecustomsearch',
     'django_filters',
     'corsheaders',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
